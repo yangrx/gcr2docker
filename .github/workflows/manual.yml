@@ -1,0 +1,20 @@
+name: manual
+on:
+  workflow_dispatch:
+    inputs:
+      from:
+        description: 'from image'
+      to:
+        description: 'to image'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pull Image
+        run: docker pull ${{ github.event.inputs.from }}
+      - name: Tag Image
+        run: docker tag ${{ github.event.inputs.from }} ${{ github.event.inputs.to }}
+      - name: Login to registry
+        run: docker login --username=${{ secrets.DOCKER_USERNAME }} --password ${{ secrets.DOCKER_PASSWORD }}
+      - name: Push Image
+        run: docker push ${{ github.event.inputs.to }}

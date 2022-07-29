@@ -1,0 +1,20 @@
+name: push
+on:
+  push:
+    branches: [ master ]
+  workflow_dispatch:
+    inputs:
+      msg:
+        description: 'any msg'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Run shell
+        shell: bash
+        run: chmod 777 ./push.sh && bash -c ./push.sh
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
